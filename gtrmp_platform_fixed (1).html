@@ -1,0 +1,2567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTRMP Platform - Faculty Success Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+    <style>
+        .sidebar-item.active {
+            background-color: #2563eb;
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
+            transition: transform 0.2s ease;
+        }
+        .data-collection-form {
+            display: none;
+        }
+        .data-collection-form.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="app"></div>
+
+    <script>
+        // Enhanced Application State - Data-Based Only
+        let state = {
+            currentUser: null,
+            currentView: 'dashboard',
+            users: [
+                { id: 1, name: 'Dr. Priya Sharma', department: 'Computer Science', position: 'Assistant Professor', email: 'priya.sharma@university.edu' },
+                { id: 2, name: 'Dr. Raj Patel', department: 'Biotechnology', position: 'Associate Professor', email: 'raj.patel@university.edu' },
+                { id: 3, name: 'Dr. Meera Singh', department: 'Business', position: 'Professor', email: 'meera.singh@university.edu' }
+            ],
+            goals: {
+                1: {
+                    teaching: { target: 7, actions: ['Create interactive online modules', 'Implement case study Fridays'] },
+                    research: { target: 6, actions: ['Submit to 3 journals', 'Collaborate with senior colleague'] }
+                }
+            },
+            // Enhanced data collection structure
+            dataCollection: {
+                1: {
+                    teaching: {
+                        courses: [
+                            { name: 'CS101 - Intro to Programming', semester: 'Fall 2024', students: 85, rating: 4.2, innovations: ['Flipped classroom', 'Peer programming'] },
+                            { name: 'CS301 - Data Structures', semester: 'Spring 2024', students: 45, rating: 4.5, innovations: ['Live coding sessions'] }
+                        ],
+                        awards: [
+                            { title: 'Excellence in Teaching Award', year: 2024, institution: 'University' }
+                        ],
+                        studentFeedback: [
+                            { comment: 'Very engaging and helpful', rating: 5, date: '2024-11-15' },
+                            { comment: 'Clear explanations of complex topics', rating: 4, date: '2024-11-10' }
+                        ]
+                    },
+                    research: {
+                        publications: [
+                            { title: 'Machine Learning in Education', journal: 'Educational Technology', year: 2024, citations: 12, impact_factor: 2.3 },
+                            { title: 'AI-Driven Learning Analytics', conference: 'ICML 2024', year: 2024, citations: 5 }
+                        ],
+                        collaborations: [
+                            { institution: 'MIT', researcher: 'Dr. John Smith', project: 'EdTech AI', status: 'Active' },
+                            { institution: 'Stanford', researcher: 'Dr. Jane Doe', project: 'Learning Systems', status: 'Completed' }
+                        ],
+                        patents: [],
+                        researchGrants: [
+                            { title: 'AI in Education Grant', amount: 50000, agency: 'NSF', status: 'Active', year: 2024 }
+                        ]
+                    },
+                    grants: {
+                        applications: [
+                            { title: 'Smart Learning Systems', agency: 'NSF', amount: 150000, status: 'Pending', date: '2024-10-15' },
+                            { title: 'EdTech Innovation Fund', agency: 'Gates Foundation', amount: 75000, status: 'Approved', date: '2024-09-01' }
+                        ],
+                        industryPartnerships: [
+                            { company: 'Google', project: 'AI Education Tools', value: 25000, status: 'Active' },
+                            { company: 'Microsoft', project: 'Learning Analytics', value: 15000, status: 'Completed' }
+                        ],
+                        successRate: 0.6
+                    },
+                    media: {
+                        interviews: [
+                            { outlet: 'TechCrunch', topic: 'AI in Education', date: '2024-11-01', reach: 50000 },
+                            { outlet: 'Education Week', topic: 'Future of Learning', date: '2024-10-15', reach: 25000 }
+                        ],
+                        socialMedia: {
+                            linkedin: { followers: 2500, posts: 45, engagement: 0.08 },
+                            twitter: { followers: 1200, posts: 120, engagement: 0.05 }
+                        },
+                        publicTalks: [
+                            { event: 'EdTech Conference 2024', audience: 500, topic: 'AI in Classrooms', date: '2024-09-20' },
+                            { event: 'Local Tech Meetup', audience: 75, topic: 'Teaching Programming', date: '2024-10-05' }
+                        ],
+                        blogPosts: [
+                            { title: 'The Future of AI Education', platform: 'Medium', views: 1500, date: '2024-11-10' }
+                        ]
+                    },
+                    policy: {
+                        committees: [
+                            { name: 'University AI Ethics Committee', role: 'Member', since: '2024-01-01', meetings: 12 },
+                            { name: 'State Education Technology Board', role: 'Advisor', since: '2024-03-01', meetings: 6 }
+                        ],
+                        consultations: [
+                            { organization: 'Department of Education', project: 'AI Policy Guidelines', compensation: 5000, date: '2024-08-15' },
+                            { organization: 'UNESCO', project: 'Global EdTech Standards', compensation: 0, date: '2024-09-30' }
+                        ],
+                        policyPapers: [
+                            { title: 'Ethical AI in Education', publisher: 'Policy Institute', date: '2024-07-20', downloads: 850 }
+                        ]
+                    }
+                },
+                2: {
+                    teaching: {
+                        courses: [
+                            { name: 'BIO201 - Molecular Biology', semester: 'Fall 2024', students: 120, rating: 4.6, innovations: ['3D molecular models', 'VR lab simulations'] }
+                        ],
+                        awards: [],
+                        studentFeedback: []
+                    },
+                    research: {
+                        publications: [
+                            { title: 'CRISPR Applications in Agriculture', journal: 'Nature Biotechnology', year: 2024, citations: 45, impact_factor: 15.2 },
+                            { title: 'Gene Editing Ethics', journal: 'Bioethics', year: 2024, citations: 23, impact_factor: 3.1 }
+                        ],
+                        collaborations: [],
+                        patents: [
+                            { title: 'Novel Gene Editing Technique', number: 'US12345678', year: 2024, status: 'Approved' }
+                        ],
+                        researchGrants: []
+                    },
+                    grants: {
+                        applications: [],
+                        industryPartnerships: [],
+                        successRate: 0.7
+                    },
+                    media: {
+                        interviews: [],
+                        socialMedia: { linkedin: { followers: 800, posts: 20, engagement: 0.06 } },
+                        publicTalks: [],
+                        blogPosts: []
+                    },
+                    policy: {
+                        committees: [],
+                        consultations: [],
+                        policyPapers: []
+                    }
+                }
+            },
+            editingArea: null,
+            newAction: '',
+            searchTerm: '',
+            selectedDepartment: 'all',
+            activeDataForm: null,
+            selectedArea: 'teaching'
+        };
+
+        // GTRMP Areas Configuration
+        const GTRMP_AREAS = [
+            { key: 'teaching', label: 'Teaching', icon: 'book-open', color: 'bg-blue-500' },
+            { key: 'research', label: 'Research', icon: 'award', color: 'bg-green-500' },
+            { key: 'grants', label: 'Grants', icon: 'dollar-sign', color: 'bg-yellow-500' },
+            { key: 'media', label: 'Media', icon: 'mic', color: 'bg-purple-500' },
+            { key: 'policy', label: 'Policy', icon: 'file-text', color: 'bg-red-500' }
+        ];
+
+        // Utility Functions
+        function calculateAverageScore(userId) {
+            // Calculate average based on data-driven scores only
+            const scores = GTRMP_AREAS.map(area => calculateDataBasedScore(userId, area.key));
+            return scores.reduce((a, b) => a + b, 0) / scores.length || 0;
+        }
+
+        function calculateDataBasedScore(userId, area) {
+            const data = state.dataCollection[userId]?.[area];
+            if (!data) return 0;
+
+            let score = 0;
+            switch (area) {
+                case 'teaching':
+                    const avgRating = data.courses?.reduce((sum, course) => sum + course.rating, 0) / (data.courses?.length || 1) || 0;
+                    const innovations = data.courses?.reduce((sum, course) => sum + (course.innovations?.length || 0), 0) || 0;
+                    score = Math.min(10, (avgRating * 2) + (innovations * 0.5) + (data.awards?.length || 0));
+                    break;
+                case 'research':
+                    const totalCitations = data.publications?.reduce((sum, pub) => sum + pub.citations, 0) || 0;
+                    const highImpactPubs = data.publications?.filter(pub => pub.impact_factor > 5).length || 0;
+                    score = Math.min(10, (totalCitations * 0.1) + (highImpactPubs * 2) + (data.patents?.length || 0));
+                    break;
+                case 'grants':
+                    const totalFunding = data.applications?.filter(app => app.status === 'Approved').reduce((sum, app) => sum + app.amount, 0) || 0;
+                    const partnerships = data.industryPartnerships?.length || 0;
+                    score = Math.min(10, (totalFunding / 50000) + partnerships);
+                    break;
+                case 'media':
+                    const totalReach = data.interviews?.reduce((sum, interview) => sum + interview.reach, 0) || 0;
+                    const socialFollowers = (data.socialMedia?.linkedin?.followers || 0) + (data.socialMedia?.twitter?.followers || 0);
+                    score = Math.min(10, (totalReach / 10000) + (socialFollowers / 1000) + (data.publicTalks?.length || 0) * 0.5);
+                    break;
+                case 'policy':
+                    const committees = data.committees?.length || 0;
+                    const consultations = data.consultations?.length || 0;
+                    const papers = data.policyPapers?.length || 0;
+                    score = Math.min(10, committees + consultations + papers);
+                    break;
+            }
+            return Math.round(score * 10) / 10;
+        }
+
+        function getIconSVG(iconName, size = 20) {
+            const icons = {
+                'book-open': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+                'award': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><path d="m8.21 13.89 7.58 7.58"/><path d="M13 8V6"/><path d="M9 8V6"/><path d="m8.21 13.89 7.58 7.58"/></svg>`,
+                'dollar-sign': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+                'mic': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`,
+                'file-text': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>`,
+                'bar-chart-3': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>`,
+                'target': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`,
+                'calendar': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+                'trending-up': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,7 13.5,15.5 8.5,10.5 2,17"/><polyline points="16,7 22,7 22,13"/></svg>`,
+                'settings': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>`,
+                'user': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+                'log-out': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>`,
+                'plus': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
+                'edit-3': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`,
+                'save': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>`,
+                'x': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+                'search': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>`,
+                'filter': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"/></svg>`,
+                'users': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+                'database': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>`,
+                'upload': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,5 17,10"/><line x1="12" y1="5" x2="12" y2="15"/></svg>`,
+                'eye': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
+            };
+            return icons[iconName] || '';
+        }
+
+        // Missing Functions - Add these
+        function generateRecommendations(userId) {
+            const recommendations = [];
+            const scores = GTRMP_AREAS.map(area => ({
+                area: area.label,
+                score: calculateDataBasedScore(userId, area.key)
+            }));
+            
+            // Find lowest scoring area
+            const lowestScore = scores.reduce((min, current) => 
+                current.score < min.score ? current : min
+            );
+            
+            recommendations.push(`Focus on improving ${lowestScore.area} (current score: ${lowestScore.score.toFixed(1)})`);
+            
+            // Find highest scoring area
+            const highestScore = scores.reduce((max, current) => 
+                current.score > max.score ? current : max
+            );
+            
+            recommendations.push(`Leverage your strength in ${highestScore.area} for collaborations`);
+            
+            // Data completeness recommendations
+            const lowCompleteness = GTRMP_AREAS.filter(area => 
+                calculateDataCompleteness(userId, area.key) < 50
+            );
+            
+            if (lowCompleteness.length > 0) {
+                recommendations.push(`Complete data entry for ${lowCompleteness[0].label}`);
+            }
+            
+            return recommendations;
+        }
+
+        function getRecentActivities(userId) {
+            const data = state.dataCollection[userId];
+            if (!data) return ['No activities recorded yet'];
+            
+            const activities = [];
+            
+            // Add recent publications
+            if (data.research?.publications?.length > 0) {
+                activities.push(`Published "${data.research.publications[0].title}"`);
+            }
+            
+            // Add recent courses
+            if (data.teaching?.courses?.length > 0) {
+                activities.push(`Teaching ${data.teaching.courses[0].name}`);
+            }
+            
+            // Add recent grants
+            if (data.grants?.applications?.length > 0) {
+                activities.push(`Applied for ${data.grants.applications[0].title}`);
+            }
+            
+            // Add recent media
+            if (data.media?.interviews?.length > 0) {
+                activities.push(`Interview with ${data.media.interviews[0].outlet}`);
+            }
+            
+            return activities.length > 0 ? activities.slice(0, 4) : ['No recent activities'];
+        }
+
+        function calculateDataCompleteness(userId, area) {
+            const data = state.dataCollection[userId]?.[area];
+            if (!data) return 0;
+            
+            let completeness = 0;
+            const maxPoints = 100;
+            
+            if (area === 'overall') {
+                // Calculate overall completeness across all areas
+                const areas = ['teaching', 'research', 'grants', 'media', 'policy'];
+                const areaCompleteness = areas.map(a => calculateDataCompleteness(userId, a));
+                return Math.round(areaCompleteness.reduce((sum, comp) => sum + comp, 0) / areas.length);
+            }
+            
+            switch (area) {
+                case 'teaching':
+                    completeness += (data.courses?.length || 0) > 0 ? 40 : 0;
+                    completeness += (data.awards?.length || 0) > 0 ? 30 : 0;
+                    completeness += (data.studentFeedback?.length || 0) > 0 ? 30 : 0;
+                    break;
+                case 'research':
+                    completeness += (data.publications?.length || 0) > 0 ? 50 : 0;
+                    completeness += (data.collaborations?.length || 0) > 0 ? 25 : 0;
+                    completeness += (data.patents?.length || 0) > 0 ? 25 : 0;
+                    break;
+                case 'grants':
+                    completeness += (data.applications?.length || 0) > 0 ? 60 : 0;
+                    completeness += (data.industryPartnerships?.length || 0) > 0 ? 40 : 0;
+                    break;
+                case 'media':
+                    completeness += (data.interviews?.length || 0) > 0 ? 25 : 0;
+                    completeness += (data.publicTalks?.length || 0) > 0 ? 25 : 0;
+                    completeness += (data.blogPosts?.length || 0) > 0 ? 25 : 0;
+                    completeness += data.socialMedia ? 25 : 0;
+                    break;
+                case 'policy':
+                    completeness += (data.committees?.length || 0) > 0 ? 40 : 0;
+                    completeness += (data.consultations?.length || 0) > 0 ? 30 : 0;
+                    completeness += (data.policyPapers?.length || 0) > 0 ? 30 : 0;
+                    break;
+            }
+            
+            return Math.min(completeness, maxPoints);
+        }
+
+        function getHighestPerformingArea(userId) {
+            let highestScore = 0;
+            let highestArea = 'Teaching';
+            
+            GTRMP_AREAS.forEach(area => {
+                const score = calculateDataBasedScore(userId, area.key);
+                if (score > highestScore) {
+                    highestScore = score;
+                    highestArea = area.label;
+                }
+            });
+            
+            return highestArea;
+        }
+
+        function getGrowthOpportunityArea(userId) {
+            let lowestScore = 10;
+            let lowestArea = 'Teaching';
+            
+            GTRMP_AREAS.forEach(area => {
+                const score = calculateDataBasedScore(userId, area.key);
+                if (score < lowestScore) {
+                    lowestScore = score;
+                    lowestArea = area.label;
+                }
+            });
+            
+            return lowestArea;
+        }
+
+        function getScoreDrivers(userId, area) {
+            const data = state.dataCollection[userId]?.[area];
+            if (!data) return 'No data available';
+            
+            const drivers = [];
+            switch (area) {
+                case 'teaching':
+                    if (data.courses?.length) drivers.push(`${data.courses.length} courses`);
+                    if (data.awards?.length) drivers.push(`${data.awards.length} awards`);
+                    break;
+                case 'research':
+                    if (data.publications?.length) drivers.push(`${data.publications.length} publications`);
+                    const citations = data.publications?.reduce((sum, p) => sum + p.citations, 0) || 0;
+                    if (citations > 0) drivers.push(`${citations} citations`);
+                    break;
+                case 'grants':
+                    const approved = data.applications?.filter(g => g.status === 'Approved').length || 0;
+                    if (approved > 0) drivers.push(`${approved} approved grants`);
+                    break;
+                case 'media':
+                    if (data.interviews?.length) drivers.push(`${data.interviews.length} interviews`);
+                    if (data.publicTalks?.length) drivers.push(`${data.publicTalks.length} talks`);
+                    break;
+                case 'policy':
+                    if (data.committees?.length) drivers.push(`${data.committees.length} committees`);
+                    if (data.consultations?.length) drivers.push(`${data.consultations.length} consultations`);
+                    break;
+            }
+            return drivers.length > 0 ? drivers.join(', ') : 'Limited activity data';
+        }
+
+        function getGrowthTrend(userId) {
+            // Simplified trend analysis - could be enhanced with historical data
+            const scores = GTRMP_AREAS.map(area => calculateDataBasedScore(userId, area.key));
+            const highScores = scores.filter(score => score >= 6).length;
+            return highScores;
+        }
+
+        function getConsistentAreas(userId) {
+            const scores = GTRMP_AREAS.map(area => calculateDataBasedScore(userId, area.key));
+            const consistentScores = scores.filter(score => score >= 4 && score <= 7).length;
+            return consistentScores;
+        }
+
+        function getImprovementOpportunity(userId) {
+            const scores = GTRMP_AREAS.map(area => calculateDataBasedScore(userId, area.key));
+            const lowScores = scores.filter(score => score < 4).length;
+            return lowScores;
+        }
+
+        function getStatusColor(status) {
+            switch (status) {
+                case 'Approved':
+                case 'Active':
+                    return 'bg-green-100 text-green-800';
+                case 'Pending':
+                case 'In Review':
+                    return 'bg-yellow-100 text-yellow-800';
+                case 'Rejected':
+                    return 'bg-red-100 text-red-800';
+                case 'Completed':
+                    return 'bg-blue-100 text-blue-800';
+                default:
+                    return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        function renderLoginScreen() {
+            return `
+                <div class="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center">
+                    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
+                        <div class="text-center mb-8">
+                            <h1 class="text-3xl font-bold text-gray-800 mb-2">GTRMP Platform</h1>
+                            <p class="text-gray-600">Faculty Success Tracking System</p>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input
+                                    type="email"
+                                    id="loginEmail"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="Enter your email"
+                                />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                                <input
+                                    type="password"
+                                    id="loginPassword"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="Enter your password"
+                                />
+                            </div>
+                            <button
+                                onclick="handleLogin()"
+                                class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                                Sign In
+                            </button>
+                        </div>
+                        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                            <p class="text-sm text-gray-600 mb-2">Demo Accounts:</p>
+                            <div class="text-xs space-y-1">
+                                <div>priya.sharma@university.edu (Assistant Prof)</div>
+                                <div>raj.patel@university.edu (Associate Prof)</div>
+                                <div>meera.singh@university.edu (Professor)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSidebar() {
+            const menuItems = [
+                { key: 'dashboard', label: 'Dashboard', icon: 'bar-chart-3' },
+                { key: 'datacollection', label: 'Data Collection', icon: 'database' },
+                { key: 'goals', label: 'Goals & Actions', icon: 'calendar' },
+                { key: 'progress', label: 'Progress Tracking', icon: 'trending-up' },
+                { key: 'admin', label: 'Admin Panel', icon: 'settings' }
+            ];
+
+            return `
+                <div class="w-64 bg-gray-900 text-white h-screen flex flex-col">
+                    <div class="p-6 border-b border-gray-700">
+                        <h2 class="text-xl font-bold">GTRMP Platform</h2>
+                        <p class="text-gray-400 text-sm mt-1">Faculty Success Tracker</p>
+                    </div>
+                    <nav class="flex-1 p-4">
+                        ${menuItems.map(item => `
+                            <button
+                                onclick="setCurrentView('${item.key}')"
+                                class="sidebar-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg mb-2 transition-colors hover:bg-gray-800 ${state.currentView === item.key ? 'active' : ''}"
+                            >
+                                ${getIconSVG(item.icon, 20)}
+                                <span>${item.label}</span>
+                            </button>
+                        `).join('')}
+                    </nav>
+                    <div class="p-4 border-t border-gray-700">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                                ${getIconSVG('user', 20)}
+                            </div>
+                            <div>
+                                <p class="font-medium">${state.currentUser?.name}</p>
+                                <p class="text-gray-400 text-sm">${state.currentUser?.position}</p>
+                            </div>
+                        </div>
+                        <button
+                            onclick="logout()"
+                            class="w-full flex items-center space-x-2 text-gray-400 hover:text-white"
+                        >
+                            ${getIconSVG('log-out', 16)}
+                            <span>Logout</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDashboard() {
+            // Calculate data-based scores only
+            const dataBasedScores = {};
+            GTRMP_AREAS.forEach(area => {
+                dataBasedScores[area.key] = calculateDataBasedScore(state.currentUser?.id, area.key);
+            });
+            const dataBasedAvg = Object.values(dataBasedScores).reduce((a, b) => a + b, 0) / 5;
+
+            return `
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-3xl font-bold text-gray-800">Welcome back, ${state.currentUser?.name}!</h1>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-600">${state.currentUser?.department}</p>
+                            <p class="text-sm text-gray-600">${state.currentUser?.position}</p>
+                        </div>
+                    </div>
+
+                    <!-- Overall Score -->
+                    <div class="bg-gradient-to-r from-green-500 to-teal-600 text-white p-8 rounded-xl">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h2 class="text-2xl font-bold mb-2">Overall GTRMP Score</h2>
+                                <p class="text-green-100">Based on your documented activities and achievements</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-5xl font-bold">${dataBasedAvg.toFixed(1)}</div>
+                                <div class="text-green-200 text-lg">out of 10</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GTRMP Areas Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                        ${GTRMP_AREAS.map(area => {
+                            const dataScore = dataBasedScores[area.key] || 0;
+                            return `
+                                <div class="bg-white p-6 rounded-lg shadow-lg border metric-card">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <div class="${area.color} p-3 rounded-lg text-white">
+                                            ${getIconSVG(area.icon, 24)}
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-gray-800">${dataScore.toFixed(1)}</div>
+                                            <div class="text-sm text-gray-500">out of 10</div>
+                                        </div>
+                                    </div>
+                                    <h3 class="font-semibold text-gray-800 mb-2">${area.label}</h3>
+                                    <div class="space-y-2">
+                                        <div class="bg-gray-200 rounded-full h-3">
+                                            <div class="${area.color} h-3 rounded-full progress-bar" style="width: ${(dataScore / 10) * 100}%"></div>
+                                        </div>
+                                        <div class="text-xs text-gray-600">
+                                            ${getScoreDrivers(state.currentUser?.id, area.key)}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+                            <div class="space-y-3">
+                                <button
+                                    onclick="setCurrentView('datacollection')"
+                                    class="w-full flex items-center space-x-3 p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
+                                >
+                                    ${getIconSVG('database', 20)}
+                                    <span>Add Data</span>
+                                </button>
+                                <button
+                                    onclick="setCurrentView('goals')"
+                                    class="w-full flex items-center space-x-3 p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
+                                >
+                                    ${getIconSVG('calendar', 20)}
+                                    <span>Set Goals</span>
+                                </button>
+                                <button
+                                    onclick="setCurrentView('progress')"
+                                    class="w-full flex items-center space-x-3 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                                >
+                                    ${getIconSVG('trending-up', 20)}
+                                    <span>View Progress</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4">Recent Activities</h3>
+                            <div class="space-y-2 text-sm">
+                                ${getRecentActivities(state.currentUser?.id).map(activity => `
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                        <span class="text-gray-700">${activity}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4">Performance Summary</h3>
+                            <div class="space-y-3">
+                                <div class="text-center p-3 bg-green-50 rounded-lg">
+                                    <div class="text-lg font-bold text-green-600">${getHighestPerformingArea(state.currentUser?.id)}</div>
+                                    <div class="text-xs text-gray-600">Strongest Area</div>
+                                </div>
+                                <div class="text-center p-3 bg-yellow-50 rounded-lg">
+                                    <div class="text-lg font-bold text-yellow-600">${getGrowthOpportunityArea(state.currentUser?.id)}</div>
+                                    <div class="text-xs text-gray-600">Growth Opportunity</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold mb-4">Data Completeness</h3>
+                            <div class="space-y-3">
+                                ${GTRMP_AREAS.map(area => {
+                                    const completeness = calculateDataCompleteness(state.currentUser?.id, area.key);
+                                    return `
+                                        <div>
+                                            <div class="flex justify-between text-sm mb-1">
+                                                <span class="capitalize">${area.label}</span>
+                                                <span>${completeness}%</span>
+                                            </div>
+                                            <div class="bg-gray-200 rounded-full h-2">
+                                                <div class="${area.color} h-2 rounded-full progress-bar" style="width: ${completeness}%"></div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDataCollection() {
+            const userData = state.dataCollection[state.currentUser?.id] || {};
+            
+            return `
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-3xl font-bold text-gray-800">Data Collection</h1>
+                        <div class="flex space-x-2">
+                            ${GTRMP_AREAS.map(area => `
+                                <button
+                                    onclick="setSelectedArea('${area.key}')"
+                                    class="px-4 py-2 rounded-lg ${area.color} text-white hover:opacity-80 transition-opacity ${state.selectedArea === area.key ? 'ring-2 ring-offset-2 ring-gray-500' : ''}"
+                                >
+                                    ${area.label}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-blue-800 mb-2">Data Collection Guidelines</h3>
+                        <p class="text-blue-700 text-sm">Add detailed information about your activities in each GTRMP area. This data will automatically calculate your evidence-based scores and provide comprehensive analytics.</p>
+                    </div>
+
+                    ${renderDataCollectionSection(state.selectedArea, userData[state.selectedArea] || {})}
+                </div>
+            `;
+        }
+
+        function renderDataCollectionSection(area, data) {
+            switch (area) {
+                case 'teaching':
+                    return renderTeachingDataCollection(data);
+                case 'research':
+                    return renderResearchDataCollection(data);
+                case 'grants':
+                    return renderGrantsDataCollection(data);
+                case 'media':
+                    return renderMediaDataCollection(data);
+                case 'policy':
+                    return renderPolicyDataCollection(data);
+                default:
+                    return '<div>Select an area to view data collection forms.</div>';
+            }
+        }
+
+        function renderTeachingDataCollection(data) {
+            const courses = data.courses || [];
+            const awards = data.awards || [];
+            const feedback = data.studentFeedback || [];
+
+            return `
+                <div class="space-y-8">
+                    <!-- Courses Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Courses Taught</h3>
+                            <button onclick="showAddForm('course')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                ${getIconSVG('plus', 16)} Add Course
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${courses.map((course, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-800">${course.name}</h4>
+                                            <p class="text-gray-600">${course.semester} • ${course.students} students • ${course.rating}/5.0 rating</p>
+                                            <div class="mt-2">
+                                                <span class="text-sm text-gray-500">Innovations: </span>
+                                                ${course.innovations?.map(innovation => `<span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mr-1">${innovation}</span>`).join('') || 'None'}
+                                            </div>
+                                        </div>
+                                        <button onclick="removeCourseData(${index})" class="text-red-500 hover:text-red-700">
+                                            ${getIconSVG('x', 16)}
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Course Form -->
+                        <div id="addCourseForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add New Course</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="text" id="courseName" placeholder="Course Name" class="px-3 py-2 border rounded-lg">
+                                <input type="text" id="courseSemester" placeholder="Semester (e.g., Fall 2024)" class="px-3 py-2 border rounded-lg">
+                                <input type="number" id="courseStudents" placeholder="Number of Students" class="px-3 py-2 border rounded-lg">
+                                <input type="number" id="courseRating" placeholder="Course Rating (1-5)" step="0.1" max="5" class="px-3 py-2 border rounded-lg">
+                                <input type="text" id="courseInnovations" placeholder="Teaching Innovations (comma-separated)" class="px-3 py-2 border rounded-lg md:col-span-2">
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addCourseData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('course')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Teaching Awards Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Teaching Awards & Recognition</h3>
+                            <button onclick="showAddForm('award')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                ${getIconSVG('plus', 16)} Add Award
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${awards.map((award, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg flex justify-between items-center">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">${award.title}</h4>
+                                        <p class="text-gray-600">${award.institution} • ${award.year}</p>
+                                    </div>
+                                    <button onclick="removeAwardData(${index})" class="text-red-500 hover:text-red-700">
+                                        ${getIconSVG('x', 16)}
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Award Form -->
+                        <div id="addAwardForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add Teaching Award</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <input type="text" id="awardTitle" placeholder="Award Title" class="px-3 py-2 border rounded-lg">
+                                <input type="text" id="awardInstitution" placeholder="Institution" class="px-3 py-2 border rounded-lg">
+                                <input type="number" id="awardYear" placeholder="Year" class="px-3 py-2 border rounded-lg">
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addAwardData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('award')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Student Feedback Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Student Feedback</h3>
+                            <button onclick="showAddForm('feedback')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                ${getIconSVG('plus', 16)} Add Feedback
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${feedback.map((fb, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <p class="text-gray-800">"${fb.comment}"</p>
+                                            <div class="flex items-center mt-2 text-sm text-gray-600">
+                                                <span>Rating: ${fb.rating}/5</span>
+                                                <span class="mx-2">•</span>
+                                                <span>${fb.date}</span>
+                                            </div>
+                                        </div>
+                                        <button onclick="removeFeedbackData(${index})" class="text-red-500 hover:text-red-700">
+                                            ${getIconSVG('x', 16)}
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Feedback Form -->
+                        <div id="addFeedbackForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add Student Feedback</h4>
+                            <div class="space-y-4">
+                                <textarea id="feedbackComment" placeholder="Student Feedback Comment" class="w-full px-3 py-2 border rounded-lg" rows="3"></textarea>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <input type="number" id="feedbackRating" placeholder="Rating (1-5)" min="1" max="5" class="px-3 py-2 border rounded-lg">
+                                    <input type="date" id="feedbackDate" class="px-3 py-2 border rounded-lg">
+                                </div>
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addFeedbackData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('feedback')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderResearchDataCollection(data) {
+            const publications = data.publications || [];
+            const collaborations = data.collaborations || [];
+            const patents = data.patents || [];
+
+            return `
+                <div class="space-y-8">
+                    <!-- Publications Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Publications</h3>
+                            <button onclick="showAddForm('publication')" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                                ${getIconSVG('plus', 16)} Add Publication
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${publications.map((pub, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-800">${pub.title}</h4>
+                                            <p class="text-gray-600">${pub.journal || pub.conference} • ${pub.year}</p>
+                                            <div class="flex items-center mt-2 text-sm">
+                                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded mr-2">Citations: ${pub.citations}</span>
+                                                ${pub.impact_factor ? `<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">IF: ${pub.impact_factor}</span>` : ''}
+                                            </div>
+                                        </div>
+                                        <button onclick="removePublicationData(${index})" class="text-red-500 hover:text-red-700">
+                                            ${getIconSVG('x', 16)}
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Publication Form -->
+                        <div id="addPublicationForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add Publication</h4>
+                            <div class="space-y-4">
+                                <input type="text" id="pubTitle" placeholder="Publication Title" class="w-full px-3 py-2 border rounded-lg">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <input type="text" id="pubJournal" placeholder="Journal/Conference" class="px-3 py-2 border rounded-lg">
+                                    <input type="number" id="pubYear" placeholder="Year" class="px-3 py-2 border rounded-lg">
+                                    <input type="number" id="pubCitations" placeholder="Citations" class="px-3 py-2 border rounded-lg">
+                                    <input type="number" id="pubImpactFactor" placeholder="Impact Factor (optional)" step="0.1" class="px-3 py-2 border rounded-lg">
+                                </div>
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addPublicationData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('publication')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Research Collaborations Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Research Collaborations</h3>
+                            <button onclick="showAddForm('collaboration')" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                                ${getIconSVG('plus', 16)} Add Collaboration
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${collaborations.map((collab, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-800">${collab.project}</h4>
+                                            <p class="text-gray-600">${collab.researcher} • ${collab.institution}</p>
+                                            <span class="inline-block mt-2 px-2 py-1 text-xs rounded ${collab.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">${collab.status}</span>
+                                        </div>
+                                        <button onclick="removeCollaborationData(${index})" class="text-red-500 hover:text-red-700">
+                                            ${getIconSVG('x', 16)}
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Collaboration Form -->
+                        <div id="addCollaborationForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add Research Collaboration</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="text" id="collabProject" placeholder="Project Name" class="px-3 py-2 border rounded-lg">
+                                <input type="text" id="collabResearcher" placeholder="Collaborator Name" class="px-3 py-2 border rounded-lg">
+                                <input type="text" id="collabInstitution" placeholder="Institution" class="px-3 py-2 border rounded-lg">
+                                <select id="collabStatus" class="px-3 py-2 border rounded-lg">
+                                    <option value="Active">Active</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Planned">Planned</option>
+                                </select>
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addCollaborationData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('collaboration')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Patents Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Patents</h3>
+                            <button onclick="showAddForm('patent')" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                                ${getIconSVG('plus', 16)} Add Patent
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${patents.map((patent, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-800">${patent.title}</h4>
+                                            <p class="text-gray-600">Patent #${patent.number} • ${patent.year}</p>
+                                            <span class="inline-block mt-2 px-2 py-1 text-xs rounded ${patent.status === 'Approved' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">${patent.status}</span>
+                                        </div>
+                                        <button onclick="removePatentData(${index})" class="text-red-500 hover:text-red-700">
+                                            ${getIconSVG('x', 16)}
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Patent Form -->
+                        <div id="addPatentForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add Patent</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="text" id="patentTitle" placeholder="Patent Title" class="px-3 py-2 border rounded-lg">
+                                <input type="text" id="patentNumber" placeholder="Patent Number" class="px-3 py-2 border rounded-lg">
+                                <input type="number" id="patentYear" placeholder="Year" class="px-3 py-2 border rounded-lg">
+                                <select id="patentStatus" class="px-3 py-2 border rounded-lg">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Rejected">Rejected</option>
+                                </select>
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addPatentData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('patent')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderGrantsDataCollection(data) {
+            const applications = data.applications || [];
+            const partnerships = data.industryPartnerships || [];
+
+            return `
+                <div class="space-y-8">
+                    <!-- Grant Applications Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Grant Applications</h3>
+                            <button onclick="showAddForm('grant')" class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700">
+                                ${getIconSVG('plus', 16)} Add Grant
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${applications.map((grant, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-800">${grant.title}</h4>
+                                            <p class="text-gray-600">${grant.agency} • $${grant.amount.toLocaleString()}</p>
+                                            <div class="flex items-center mt-2">
+                                                <span class="inline-block px-2 py-1 text-xs rounded ${getStatusColor(grant.status)}">${grant.status}</span>
+                                                <span class="ml-2 text-sm text-gray-500">${grant.date}</span>
+                                            </div>
+                                        </div>
+                                        <button onclick="removeGrantData(${index})" class="text-red-500 hover:text-red-700">
+                                            ${getIconSVG('x', 16)}
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Grant Form -->
+                        <div id="addGrantForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add Grant Application</h4>
+                            <div class="space-y-4">
+                                <input type="text" id="grantTitle" placeholder="Grant Title" class="w-full px-3 py-2 border rounded-lg">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <input type="text" id="grantAgency" placeholder="Funding Agency" class="px-3 py-2 border rounded-lg">
+                                    <input type="number" id="grantAmount" placeholder="Amount ($)" class="px-3 py-2 border rounded-lg">
+                                    <input type="date" id="grantDate" class="px-3 py-2 border rounded-lg">
+                                </div>
+                                <select id="grantStatus" class="w-full px-3 py-2 border rounded-lg">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Rejected">Rejected</option>
+                                    <option value="In Review">In Review</option>
+                                </select>
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addGrantData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('grant')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Industry Partnerships Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Industry Partnerships</h3>
+                            <button onclick="showAddForm('partnership')" class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700">
+                                ${getIconSVG('plus', 16)} Add Partnership
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${partnerships.map((partnership, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-800">${partnership.project}</h4>
+                                            <p class="text-gray-600">${partnership.company} • $${partnership.value.toLocaleString()}</p>
+                                            <span class="inline-block mt-2 px-2 py-1 text-xs rounded ${getStatusColor(partnership.status)}">${partnership.status}</span>
+                                        </div>
+                                        <button onclick="removePartnershipData(${index})" class="text-red-500 hover:text-red-700">
+                                            ${getIconSVG('x', 16)}
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Partnership Form -->
+                        <div id="addPartnershipForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add Industry Partnership</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="text" id="partnershipProject" placeholder="Project Name" class="px-3 py-2 border rounded-lg">
+                                <input type="text" id="partnershipCompany" placeholder="Company" class="px-3 py-2 border rounded-lg">
+                                <input type="number" id="partnershipValue" placeholder="Value ($)" class="px-3 py-2 border rounded-lg">
+                                <select id="partnershipStatus" class="px-3 py-2 border rounded-lg">
+                                    <option value="Active">Active</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Planned">Planned</option>
+                                </select>
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addPartnershipData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('partnership')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grant Success Metrics -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Success Metrics</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-yellow-600">${applications.filter(g => g.status === 'Approved').length}</div>
+                                <div class="text-gray-600">Approved Grants</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-green-600">$${applications.filter(g => g.status === 'Approved').reduce((sum, g) => sum + g.amount, 0).toLocaleString()}</div>
+                                <div class="text-gray-600">Total Funding</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-blue-600">${applications.length > 0 ? ((applications.filter(g => g.status === 'Approved').length / applications.length) * 100).toFixed(1) : 0}%</div>
+                                <div class="text-gray-600">Success Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderMediaDataCollection(data) {
+            const interviews = data.interviews || [];
+            const talks = data.publicTalks || [];
+            const blogs = data.blogPosts || [];
+            const social = data.socialMedia || {};
+
+            return `
+                <div class="space-y-8">
+                    <!-- Media Interviews Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Media Interviews</h3>
+                            <button onclick="showAddForm('interview')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                                ${getIconSVG('plus', 16)} Add Interview
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${interviews.map((interview, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-800">${interview.topic}</h4>
+                                            <p class="text-gray-600">${interview.outlet} • ${interview.date}</p>
+                                            <span class="inline-block mt-2 bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Reach: ${interview.reach.toLocaleString()}</span>
+                                        </div>
+                                        <button onclick="removeInterviewData(${index})" class="text-red-500 hover:text-red-700">
+                                            ${getIconSVG('x', 16)}
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Interview Form -->
+                        <div id="addInterviewForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add Media Interview</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="text" id="interviewTopic" placeholder="Interview Topic" class="px-3 py-2 border rounded-lg">
+                                <input type="text" id="interviewOutlet" placeholder="Media Outlet" class="px-3 py-2 border rounded-lg">
+                                <input type="date" id="interviewDate" class="px-3 py-2 border rounded-lg">
+                                <input type="number" id="interviewReach" placeholder="Estimated Reach" class="px-3 py-2 border rounded-lg">
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addInterviewData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('interview')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Public Talks Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Public Talks & Presentations</h3>
+                            <button onclick="showAddForm('talk')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                                ${getIconSVG('plus', 16)} Add Talk
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${talks.map((talk, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-800">${talk.topic}</h4>
+                                            <p class="text-gray-600">${talk.event} • ${talk.date}</p>
+                                            <span class="inline-block mt-2 bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Audience: ${talk.audience}</span>
+                                        </div>
+                                        <button onclick="removeTalkData(${index})" class="text-red-500 hover:text-red-700">
+                                            ${getIconSVG('x', 16)}
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Talk Form -->
+                        <div id="addTalkForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add Public Talk</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="text" id="talkTopic" placeholder="Talk Topic" class="px-3 py-2 border rounded-lg">
+                                <input type="text" id="talkEvent" placeholder="Event/Venue" class="px-3 py-2 border rounded-lg">
+                                <input type="date" id="talkDate" class="px-3 py-2 border rounded-lg">
+                                <input type="number" id="talkAudience" placeholder="Audience Size" class="px-3 py-2 border rounded-lg">
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addTalkData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('talk')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blog Posts Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Blog Posts & Articles</h3>
+                            <button onclick="showAddForm('blog')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                                ${getIconSVG('plus', 16)} Add Blog Post
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${blogs.map((blog, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-800">${blog.title}</h4>
+                                            <p class="text-gray-600">${blog.platform} • ${blog.date}</p>
+                                            <span class="inline-block mt-2 bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Views: ${blog.views.toLocaleString()}</span>
+                                        </div>
+                                        <button onclick="removeBlogData(${index})" class="text-red-500 hover:text-red-700">
+                                            ${getIconSVG('x', 16)}
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Blog Form -->
+                        <div id="addBlogForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add Blog Post</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="text" id="blogTitle" placeholder="Blog Post Title" class="px-3 py-2 border rounded-lg">
+                                <input type="text" id="blogPlatform" placeholder="Platform (Medium, LinkedIn, etc.)" class="px-3 py-2 border rounded-lg">
+                                <input type="date" id="blogDate" class="px-3 py-2 border rounded-lg">
+                                <input type="number" id="blogViews" placeholder="Views/Reads" class="px-3 py-2 border rounded-lg">
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addBlogData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('blog')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Metrics -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Social Media Presence</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="border border-gray-200 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-700 mb-3">LinkedIn</h4>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between">
+                                        <span>Followers:</span>
+                                        <span class="font-semibold">${social.linkedin?.followers || 0}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Posts:</span>
+                                        <span class="font-semibold">${social.linkedin?.posts || 0}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Engagement:</span>
+                                        <span class="font-semibold">${((social.linkedin?.engagement || 0) * 100).toFixed(1)}%</span>
+                                    </div>
+                                </div>
+                                <button onclick="updateSocialMedia('linkedin')" class="mt-3 text-blue-600 hover:text-blue-800 text-sm">Update</button>
+                            </div>
+                            
+                            <div class="border border-gray-200 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-700 mb-3">Twitter</h4>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between">
+                                        <span>Followers:</span>
+                                        <span class="font-semibold">${social.twitter?.followers || 0}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Posts:</span>
+                                        <span class="font-semibold">${social.twitter?.posts || 0}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Engagement:</span>
+                                        <span class="font-semibold">${((social.twitter?.engagement || 0) * 100).toFixed(1)}%</span>
+                                    </div>
+                                </div>
+                                <button onclick="updateSocialMedia('twitter')" class="mt-3 text-blue-600 hover:text-blue-800 text-sm">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderPolicyDataCollection(data) {
+            const committees = data.committees || [];
+            const consultations = data.consultations || [];
+            const papers = data.policyPapers || [];
+
+            return `
+                <div class="space-y-8">
+                    <!-- Committee Memberships Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Committee Memberships</h3>
+                            <button onclick="showAddForm('committee')" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                                ${getIconSVG('plus', 16)} Add Committee
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${committees.map((committee, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-800">${committee.name}</h4>
+                                            <p class="text-gray-600">Role: ${committee.role} • Since: ${committee.since}</p>
+                                            <span class="inline-block mt-2 bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Meetings Attended: ${committee.meetings}</span>
+                                        </div>
+                                        <button onclick="removeCommitteeData(${index})" class="text-red-500 hover:text-red-700">
+                                            ${getIconSVG('x', 16)}
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Committee Form -->
+                        <div id="addCommitteeForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add Committee Membership</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="text" id="committeeName" placeholder="Committee Name" class="px-3 py-2 border rounded-lg">
+                                <input type="text" id="committeeRole" placeholder="Your Role" class="px-3 py-2 border rounded-lg">
+                                <input type="date" id="committeeSince" placeholder="Start Date" class="px-3 py-2 border rounded-lg">
+                                <input type="number" id="committeeMeetings" placeholder="Meetings Attended" class="px-3 py-2 border rounded-lg">
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addCommitteeData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('committee')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Policy Consultations Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Policy Consultations</h3>
+                            <button onclick="showAddForm('consultation')" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                                ${getIconSVG('plus', 16)} Add Consultation
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${consultations.map((consultation, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-800">${consultation.project}</h4>
+                                            <p class="text-gray-600">${consultation.organization} • ${consultation.date}</p>
+                                            <span class="inline-block mt-2 bg-red-100 text-red-800 text-xs px-2 py-1 rounded">
+                                                ${consultation.compensation > 0 ? `${consultation.compensation.toLocaleString()}` : 'Pro Bono'}
+                                            </span>
+                                        </div>
+                                        <button onclick="removeConsultationData(${index})" class="text-red-500 hover:text-red-700">
+                                            ${getIconSVG('x', 16)}
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Consultation Form -->
+                        <div id="addConsultationForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add Policy Consultation</h4>
+                            <div class="space-y-4">
+                                <input type="text" id="consultationProject" placeholder="Project/Topic" class="w-full px-3 py-2 border rounded-lg">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <input type="text" id="consultationOrganization" placeholder="Organization" class="px-3 py-2 border rounded-lg">
+                                    <input type="date" id="consultationDate" class="px-3 py-2 border rounded-lg">
+                                    <input type="number" id="consultationCompensation" placeholder="Compensation ($, 0 for pro bono)" class="px-3 py-2 border rounded-lg">
+                                </div>
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addConsultationData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('consultation')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Policy Papers Section -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Policy Papers & Reports</h3>
+                            <button onclick="showAddForm('policyPaper')" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                                ${getIconSVG('plus', 16)} Add Paper
+                            </button>
+                        </div>
+                        
+                        <div class="grid gap-4">
+                            ${papers.map((paper, index) => `
+                                <div class="border border-gray-200 p-4 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-800">${paper.title}</h4>
+                                            <p class="text-gray-600">${paper.publisher} • ${paper.date}</p>
+                                            <span class="inline-block mt-2 bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Downloads: ${paper.downloads}</span>
+                                        </div>
+                                        <button onclick="removePolicyPaperData(${index})" class="text-red-500 hover:text-red-700">
+                                            ${getIconSVG('x', 16)}
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Add Policy Paper Form -->
+                        <div id="addPolicyPaperForm" class="data-collection-form mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold mb-4">Add Policy Paper</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="text" id="policyPaperTitle" placeholder="Paper Title" class="px-3 py-2 border rounded-lg">
+                                <input type="text" id="policyPaperPublisher" placeholder="Publisher/Organization" class="px-3 py-2 border rounded-lg">
+                                <input type="date" id="policyPaperDate" class="px-3 py-2 border rounded-lg">
+                                <input type="number" id="policyPaperDownloads" placeholder="Downloads/Views" class="px-3 py-2 border rounded-lg">
+                            </div>
+                            <div class="flex space-x-2 mt-4">
+                                <button onclick="addPolicyPaperData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Save</button>
+                                <button onclick="hideAddForm('policyPaper')" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Policy Impact Metrics -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Policy Impact Summary</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-red-600">${committees.length}</div>
+                                <div class="text-gray-600">Active Committees</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-orange-600">${consultations.length}</div>
+                                <div class="text-gray-600">Policy Consultations</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-yellow-600">${papers.reduce((sum, p) => sum + p.downloads, 0)}</div>
+                                <div class="text-gray-600">Total Downloads</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderGoals() {
+            const userGoals = state.goals[state.currentUser?.id] || {};
+
+            return `
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-3xl font-bold text-gray-800">Goals & Action Plans</h1>
+                        <button
+                            onclick="saveGoals()"
+                            class="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                        >
+                            ${getIconSVG('save', 16)}
+                            <span>Save All Goals</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-amber-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-amber-800 mb-2">Goal Setting Strategy</h3>
+                        <p class="text-amber-700 text-sm">Focus on 2 areas at a time. Set specific 3-month and 90-day targets with concrete actions based on your data-driven scores.</p>
+                    </div>
+
+                    <div class="grid gap-6">
+                        ${GTRMP_AREAS.map(area => {
+                            const hasGoal = userGoals[area.key];
+                            const isEditing = state.editingArea === area.key;
+                            const currentScore = calculateDataBasedScore(state.currentUser?.id, area.key);
+
+                            return `
+                                <div class="bg-white p-6 rounded-lg shadow-lg border">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="${area.color} p-3 rounded-lg text-white">
+                                                ${getIconSVG(area.icon, 24)}
+                                            </div>
+                                            <div>
+                                                <h3 class="text-xl font-semibold text-gray-800">${area.label}</h3>
+                                                <p class="text-gray-600 text-sm">Current Score: ${currentScore.toFixed(1)}/10</p>
+                                            </div>
+                                        </div>
+                                        ${!hasGoal ? `
+                                            <button
+                                                onclick="addGoal('${area.key}')"
+                                                class="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                                            >
+                                                ${getIconSVG('plus', 16)}
+                                                <span>Add Goal</span>
+                                            </button>
+                                        ` : `
+                                            <button
+                                                onclick="toggleEditGoal('${area.key}')"
+                                                class="flex items-center space-x-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
+                                            >
+                                                ${getIconSVG('edit-3', 16)}
+                                                <span>${isEditing ? 'Done' : 'Edit'}</span>
+                                            </button>
+                                        `}
+                                    </div>
+
+                                    ${hasGoal ? `
+                                        <div class="space-y-4">
+                                            <div class="flex items-center space-x-4">
+                                                <span class="font-medium">Target Score:</span>
+                                                ${isEditing ? `
+                                                    <input
+                                                        type="number"
+                                                        min="1"
+                                                        max="10"
+                                                        value="${hasGoal.target}"
+                                                        onchange="updateGoalTarget('${area.key}', this.value)"
+                                                        class="w-20 px-2 py-1 border border-gray-300 rounded"
+                                                    />
+                                                ` : `
+                                                    <span class="text-2xl font-bold text-blue-600">${hasGoal.target}</span>
+                                                `}
+                                                <span class="text-gray-600">/ 10</span>
+                                                <span class="text-sm text-gray-500">(Gap: ${Math.max(0, hasGoal.target - currentScore).toFixed(1)} points)</span>
+                                            </div>
+
+                                            <div>
+                                                <h4 class="font-medium text-gray-700 mb-2">Action Items:</h4>
+                                                <div class="space-y-2">
+                                                    ${hasGoal.actions?.map((action, index) => `
+                                                        <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                                                            <span class="text-gray-700">${action}</span>
+                                                            ${isEditing ? `
+                                                                <button
+                                                                    onclick="removeAction('${area.key}', ${index})"
+                                                                    class="text-red-500 hover:text-red-700"
+                                                                >
+                                                                    ${getIconSVG('x', 16)}
+                                                                </button>
+                                                            ` : ''}
+                                                        </div>
+                                                    `).join('') || ''}
+                                                    
+                                                    ${isEditing ? `
+                                                        <div class="flex space-x-2">
+                                                            <input
+                                                                type="text"
+                                                                id="newAction-${area.key}"
+                                                                placeholder="Add new action item..."
+                                                                class="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
+                                                                onkeypress="if(event.key==='Enter') addAction('${area.key}')"
+                                                            />
+                                                            <button
+                                                                onclick="addAction('${area.key}')"
+                                                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                                                            >
+                                                                Add
+                                                            </button>
+                                                        </div>
+                                                    ` : ''}
+                                                </div>
+                                            </div>
+
+                                            <!-- Progress indicator -->
+                                            <div class="mt-4">
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span>Progress to Goal</span>
+                                                    <span>${Math.min((currentScore / hasGoal.target) * 100, 100).toFixed(0)}%</span>
+                                                </div>
+                                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                                    <div class="${area.color} h-2 rounded-full" style="width: ${Math.min((currentScore / hasGoal.target) * 100, 100)}%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderProgress() {
+            const userGoals = state.goals[state.currentUser?.id] || {};
+
+            return `
+                <div class="space-y-6">
+                    <h1 class="text-3xl font-bold text-gray-800">Progress Tracking</h1>
+
+                    <!-- Overall Progress Summary -->
+                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl border">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4">Overall GTRMP Performance</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="text-center">
+                                <div class="text-4xl font-bold text-blue-600">${calculateAverageScore(state.currentUser?.id).toFixed(1)}</div>
+                                <div class="text-gray-600">Overall Score</div>
+                                <div class="text-xs text-gray-500 mt-1">Data-based calculation</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-4xl font-bold text-green-600">${calculateDataCompleteness(state.currentUser?.id, 'overall')}%</div>
+                                <div class="text-gray-600">Data Completeness</div>
+                                <div class="text-xs text-gray-500 mt-1">Across all areas</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-4xl font-bold text-purple-600">${Object.keys(userGoals).length}</div>
+                                <div class="text-gray-600">Active Goals</div>
+                                <div class="text-xs text-gray-500 mt-1">Areas with targets</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        ${GTRMP_AREAS.map(area => {
+                            const currentScore = calculateDataBasedScore(state.currentUser?.id, area.key);
+                            const targetScore = userGoals[area.key]?.target || 0;
+                            const progress = targetScore > 0 ? (currentScore / targetScore) * 100 : 0;
+
+                            return `
+                                <div class="bg-white p-6 rounded-lg shadow-lg border">
+                                    <div class="flex items-center space-x-4 mb-4">
+                                        <div class="${area.color} p-3 rounded-lg text-white">
+                                            ${getIconSVG(area.icon, 24)}
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-semibold text-gray-800">${area.label}</h3>
+                                            <p class="text-gray-600 text-sm">
+                                                Current: ${currentScore.toFixed(1)} | Target: ${targetScore || 'Not set'}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    ${targetScore > 0 ? `
+                                        <div class="space-y-3">
+                                            <div class="flex justify-between text-sm">
+                                                <span>Progress to Target</span>
+                                                <span>${Math.min(progress, 100).toFixed(0)}%</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                                <div
+                                                    class="h-3 rounded-full ${area.color} progress-bar"
+                                                    style="width: ${Math.min(progress, 100)}%"
+                                                ></div>
+                                            </div>
+                                            <div class="text-xs text-gray-600">
+                                                ${currentScore >= targetScore ? 
+                                                    '🎉 Target achieved! Consider setting a higher goal.' : 
+                                                    `${(targetScore - currentScore).toFixed(1)} points to reach your target`
+                                                }
+                                            </div>
+                                        </div>
+                                    ` : `
+                                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                                            <div class="text-gray-500 mb-2">No target set</div>
+                                            <button
+                                                onclick="setCurrentView('goals')"
+                                                class="text-blue-600 hover:text-blue-800 text-sm underline"
+                                            >
+                                                Set goal for ${area.label} →
+                                            </button>
+                                        </div>
+                                    `}
+
+                                    <!-- Data-driven insights -->
+                                    <div class="mt-4 p-3 bg-gray-50 rounded-lg">
+                                        <h5 class="text-sm font-semibold text-gray-700 mb-1">Score Drivers:</h5>
+                                        <div class="text-xs text-gray-600">
+                                            ${getScoreDrivers(state.currentUser?.id, area.key)}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAdminPanel() {
+            const departments = [...new Set(state.users.map(user => user.department))];
+            const filteredUsers = state.users.filter(user =>
+                user.name.toLowerCase().includes(state.searchTerm.toLowerCase()) &&
+                (state.selectedDepartment === 'all' || user.department === state.selectedDepartment)
+            );
+
+            const avgScore = state.users.length ? 
+                state.users.reduce((sum, user) => sum + calculateAverageScore(user.id), 0) / state.users.length : 0;
+            const highPerformers = state.users.filter(user => calculateAverageScore(user.id) >= 7).length;
+            const needSupport = state.users.filter(user => calculateAverageScore(user.id) < 4).length;
+
+            return `
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-3xl font-bold text-gray-800">Admin Panel</h1>
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-2">
+                                ${getIconSVG('users', 20)}
+                                <span class="text-gray-600">${state.users.length} Faculty Members</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="bg-white p-4 rounded-lg shadow-lg">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1">
+                                <div class="relative">
+                                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                        ${getIconSVG('search', 20)}
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="Search faculty members..."
+                                        value="${state.searchTerm}"
+                                        oninput="updateSearchTerm(this.value)"
+                                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                ${getIconSVG('filter', 20)}
+                                <select
+                                    value="${state.selectedDepartment}"
+                                    onchange="updateSelectedDepartment(this.value)"
+                                    class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                >
+                                    <option value="all">All Departments</option>
+                                    ${departments.map(dept => `<option value="${dept}">${dept}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Overview -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Total Faculty</h3>
+                            <p class="text-3xl font-bold text-blue-600">${state.users.length}</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Average Score</h3>
+                            <p class="text-3xl font-bold text-green-600">${avgScore.toFixed(1)}</p>
+                            <p class="text-xs text-gray-500">Data-based evaluation</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">High Performers</h3>
+                            <p class="text-3xl font-bold text-purple-600">${highPerformers}</p>
+                            <p class="text-xs text-gray-500">Score ≥ 7.0</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Need Support</h3>
+                            <p class="text-3xl font-bold text-orange-600">${needSupport}</p>
+                            <p class="text-xs text-gray-500">Score < 4.0</p>
+                        </div>
+                    </div>
+
+                    <!-- Faculty List -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Faculty Overview - Data-Based Evaluation</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Overall Score</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">T-R-G-M-P</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    ${filteredUsers.map(user => {
+                                        const avgScore = calculateAverageScore(user.id);
+                                        const initials = user.name.split(' ').map(n => n[0]).join('');
+                                        const scores = GTRMP_AREAS.map(area => calculateDataBasedScore(user.id, area.key).toFixed(1)).join('-');
+                                        const statusClass = avgScore >= 7 ? 'bg-green-100 text-green-800' : 
+                                                          avgScore >= 4 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800';
+                                        const statusText = avgScore >= 7 ? 'Excellent' : avgScore >= 4 ? 'Good' : 'Needs Support';
+                                        const barColor = avgScore >= 7 ? 'bg-green-500' : avgScore >= 4 ? 'bg-yellow-500' : 'bg-red-500';
+
+                                        return `
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="flex items-center">
+                                                        <div class="flex-shrink-0 h-10 w-10">
+                                                            <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold">
+                                                                ${initials}
+                                                            </div>
+                                                        </div>
+                                                        <div class="ml-4">
+                                                            <div class="text-sm font-medium text-gray-900">${user.name}</div>
+                                                            <div class="text-sm text-gray-500">${user.email}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.department}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.position}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="text-sm font-bold text-gray-900">${avgScore.toFixed(1)}/10</div>
+                                                    <div class="w-20 bg-gray-200 rounded-full h-2">
+                                                        <div class="h-2 rounded-full ${barColor}" style="width: ${(avgScore / 10) * 100}%"></div>
+                                                    </div>
+                                                    <div class="text-xs text-gray-500">Data-based</div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">${scores}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${statusClass}">
+                                                        ${statusText}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Event Handlers
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const user = state.users.find(u => u.email === email);
+            if (user) {
+                state.currentUser = user;
+                state.currentView = 'dashboard';
+                render();
+            } else {
+                alert('User not found. Please use one of the demo accounts.');
+            }
+        }
+
+        function logout() {
+            state.currentUser = null;
+            state.currentView = 'dashboard';
+            render();
+        }
+
+        function setCurrentView(view) {
+            state.currentView = view;
+            render();
+        }
+
+        function setSelectedArea(area) {
+            state.selectedArea = area;
+            render();
+        }
+
+        function addGoal(area) {
+            if (!state.goals[state.currentUser.id]) {
+                state.goals[state.currentUser.id] = {};
+            }
+            state.goals[state.currentUser.id][area] = { target: 5, actions: [] };
+            state.editingArea = area;
+            render();
+        }
+
+        function toggleEditGoal(area) {
+            state.editingArea = state.editingArea === area ? null : area;
+            render();
+        }
+
+        function updateGoalTarget(area, target) {
+            if (state.goals[state.currentUser.id] && state.goals[state.currentUser.id][area]) {
+                state.goals[state.currentUser.id][area].target = parseInt(target);
+            }
+        }
+
+        function addAction(area) {
+            const input = document.getElementById(`newAction-${area}`);
+            const newAction = input.value.trim();
+            if (newAction) {
+                if (!state.goals[state.currentUser.id][area].actions) {
+                    state.goals[state.currentUser.id][area].actions = [];
+                }
+                state.goals[state.currentUser.id][area].actions.push(newAction);
+                input.value = '';
+                render();
+            }
+        }
+
+        function removeAction(area, index) {
+            state.goals[state.currentUser.id][area].actions.splice(index, 1);
+            render();
+        }
+
+        function saveGoals() {
+            state.editingArea = null;
+            alert('Goals saved successfully!');
+            render();
+        }
+
+        function updateSearchTerm(value) {
+            state.searchTerm = value;
+            render();
+        }
+
+        function updateSelectedDepartment(value) {
+            state.selectedDepartment = value;
+            render();
+        }
+
+        // Data Collection Event Handlers
+        function showAddForm(formType) {
+            const formMap = {
+                'course': 'addCourseForm',
+                'award': 'addAwardForm', 
+                'feedback': 'addFeedbackForm',
+                'publication': 'addPublicationForm',
+                'collaboration': 'addCollaborationForm',
+                'patent': 'addPatentForm',
+                'grant': 'addGrantForm',
+                'partnership': 'addPartnershipForm',
+                'interview': 'addInterviewForm',
+                'talk': 'addTalkForm',
+                'blog': 'addBlogForm',
+                'committee': 'addCommitteeForm',
+                'consultation': 'addConsultationForm',
+                'policyPaper': 'addPolicyPaperForm'
+            };
+            const formId = formMap[formType];
+            if (formId) {
+                document.getElementById(formId).classList.add('active');
+            }
+        }
+
+        function hideAddForm(formType) {
+            const formMap = {
+                'course': 'addCourseForm',
+                'award': 'addAwardForm', 
+                'feedback': 'addFeedbackForm',
+                'publication': 'addPublicationForm',
+                'collaboration': 'addCollaborationForm',
+                'patent': 'addPatentForm',
+                'grant': 'addGrantForm',
+                'partnership': 'addPartnershipForm',
+                'interview': 'addInterviewForm',
+                'talk': 'addTalkForm',
+                'blog': 'addBlogForm',
+                'committee': 'addCommitteeForm',
+                'consultation': 'addConsultationForm',
+                'policyPaper': 'addPolicyPaperForm'
+            };
+            const formId = formMap[formType];
+            if (formId) {
+                document.getElementById(formId).classList.remove('active');
+            }
+        }
+
+        // Teaching Data Functions
+        function addCourseData() {
+            const name = document.getElementById('courseName').value;
+            const semester = document.getElementById('courseSemester').value;
+            const students = parseInt(document.getElementById('courseStudents').value);
+            const rating = parseFloat(document.getElementById('courseRating').value);
+            const innovations = document.getElementById('courseInnovations').value.split(',').map(s => s.trim()).filter(s => s);
+
+            if (!name || !semester || !students || !rating) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id]) {
+                state.dataCollection[state.currentUser.id] = {};
+            }
+            if (!state.dataCollection[state.currentUser.id].teaching) {
+                state.dataCollection[state.currentUser.id].teaching = {};
+            }
+            if (!state.dataCollection[state.currentUser.id].teaching.courses) {
+                state.dataCollection[state.currentUser.id].teaching.courses = [];
+            }
+
+            state.dataCollection[state.currentUser.id].teaching.courses.push({
+                name, semester, students, rating, innovations
+            });
+
+            // Clear form
+            document.getElementById('courseName').value = '';
+            document.getElementById('courseSemester').value = '';
+            document.getElementById('courseStudents').value = '';
+            document.getElementById('courseRating').value = '';
+            document.getElementById('courseInnovations').value = '';
+            
+            hideAddForm('course');
+            render();
+        }
+
+        function removeCourseData(index) {
+            state.dataCollection[state.currentUser.id].teaching.courses.splice(index, 1);
+            render();
+        }
+
+        function addAwardData() {
+            const title = document.getElementById('awardTitle').value;
+            const institution = document.getElementById('awardInstitution').value;
+            const year = parseInt(document.getElementById('awardYear').value);
+
+            if (!title || !institution || !year) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id].teaching.awards) {
+                state.dataCollection[state.currentUser.id].teaching.awards = [];
+            }
+
+            state.dataCollection[state.currentUser.id].teaching.awards.push({
+                title, institution, year
+            });
+
+            // Clear form
+            document.getElementById('awardTitle').value = '';
+            document.getElementById('awardInstitution').value = '';
+            document.getElementById('awardYear').value = '';
+            
+            hideAddForm('award');
+            render();
+        }
+
+        function removeAwardData(index) {
+            state.dataCollection[state.currentUser.id].teaching.awards.splice(index, 1);
+            render();
+        }
+
+        function addFeedbackData() {
+            const comment = document.getElementById('feedbackComment').value;
+            const rating = parseInt(document.getElementById('feedbackRating').value);
+            const date = document.getElementById('feedbackDate').value;
+
+            if (!comment || !rating || !date) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id].teaching.studentFeedback) {
+                state.dataCollection[state.currentUser.id].teaching.studentFeedback = [];
+            }
+
+            state.dataCollection[state.currentUser.id].teaching.studentFeedback.push({
+                comment, rating, date
+            });
+
+            // Clear form
+            document.getElementById('feedbackComment').value = '';
+            document.getElementById('feedbackRating').value = '';
+            document.getElementById('feedbackDate').value = '';
+            
+            hideAddForm('feedback');
+            render();
+        }
+
+        function removeFeedbackData(index) {
+            state.dataCollection[state.currentUser.id].teaching.studentFeedback.splice(index, 1);
+            render();
+        }
+
+        // Research Data Functions
+        function addPublicationData() {
+            const title = document.getElementById('pubTitle').value;
+            const journal = document.getElementById('pubJournal').value;
+            const year = parseInt(document.getElementById('pubYear').value);
+            const citations = parseInt(document.getElementById('pubCitations').value) || 0;
+            const impact_factor = parseFloat(document.getElementById('pubImpactFactor').value) || null;
+
+            if (!title || !journal || !year) {
+                alert('Please fill in required fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id].research) {
+                state.dataCollection[state.currentUser.id].research = {};
+            }
+            if (!state.dataCollection[state.currentUser.id].research.publications) {
+                state.dataCollection[state.currentUser.id].research.publications = [];
+            }
+
+            const publication = { title, year, citations };
+            if (journal.toLowerCase().includes('conference')) {
+                publication.conference = journal;
+            } else {
+                publication.journal = journal;
+                if (impact_factor) publication.impact_factor = impact_factor;
+            }
+
+            state.dataCollection[state.currentUser.id].research.publications.push(publication);
+
+            // Clear form
+            document.getElementById('pubTitle').value = '';
+            document.getElementById('pubJournal').value = '';
+            document.getElementById('pubYear').value = '';
+            document.getElementById('pubCitations').value = '';
+            document.getElementById('pubImpactFactor').value = '';
+            
+            hideAddForm('publication');
+            render();
+        }
+
+        function removePublicationData(index) {
+            state.dataCollection[state.currentUser.id].research.publications.splice(index, 1);
+            render();
+        }
+
+        function addCollaborationData() {
+            const project = document.getElementById('collabProject').value;
+            const researcher = document.getElementById('collabResearcher').value;
+            const institution = document.getElementById('collabInstitution').value;
+            const status = document.getElementById('collabStatus').value;
+
+            if (!project || !researcher || !institution) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id].research.collaborations) {
+                state.dataCollection[state.currentUser.id].research.collaborations = [];
+            }
+
+            state.dataCollection[state.currentUser.id].research.collaborations.push({
+                project, researcher, institution, status
+            });
+
+            // Clear form
+            document.getElementById('collabProject').value = '';
+            document.getElementById('collabResearcher').value = '';
+            document.getElementById('collabInstitution').value = '';
+            
+            hideAddForm('collaboration');
+            render();
+        }
+
+        function removeCollaborationData(index) {
+            state.dataCollection[state.currentUser.id].research.collaborations.splice(index, 1);
+            render();
+        }
+
+        function addPatentData() {
+            const title = document.getElementById('patentTitle').value;
+            const number = document.getElementById('patentNumber').value;
+            const year = parseInt(document.getElementById('patentYear').value);
+            const status = document.getElementById('patentStatus').value;
+
+            if (!title || !number || !year) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id].research.patents) {
+                state.dataCollection[state.currentUser.id].research.patents = [];
+            }
+
+            state.dataCollection[state.currentUser.id].research.patents.push({
+                title, number, year, status
+            });
+
+            // Clear form
+            document.getElementById('patentTitle').value = '';
+            document.getElementById('patentNumber').value = '';
+            document.getElementById('patentYear').value = '';
+            
+            hideAddForm('patent');
+            render();
+        }
+
+        function removePatentData(index) {
+            state.dataCollection[state.currentUser.id].research.patents.splice(index, 1);
+            render();
+        }
+
+        // Grants Data Functions
+        function addGrantData() {
+            const title = document.getElementById('grantTitle').value;
+            const agency = document.getElementById('grantAgency').value;
+            const amount = parseInt(document.getElementById('grantAmount').value);
+            const date = document.getElementById('grantDate').value;
+            const status = document.getElementById('grantStatus').value;
+
+            if (!title || !agency || !amount || !date) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id].grants) {
+                state.dataCollection[state.currentUser.id].grants = {};
+            }
+            if (!state.dataCollection[state.currentUser.id].grants.applications) {
+                state.dataCollection[state.currentUser.id].grants.applications = [];
+            }
+
+            state.dataCollection[state.currentUser.id].grants.applications.push({
+                title, agency, amount, date, status
+            });
+
+            // Clear form
+            document.getElementById('grantTitle').value = '';
+            document.getElementById('grantAgency').value = '';
+            document.getElementById('grantAmount').value = '';
+            document.getElementById('grantDate').value = '';
+            
+            hideAddForm('grant');
+            render();
+        }
+
+        function removeGrantData(index) {
+            state.dataCollection[state.currentUser.id].grants.applications.splice(index, 1);
+            render();
+        }
+
+        function addPartnershipData() {
+            const project = document.getElementById('partnershipProject').value;
+            const company = document.getElementById('partnershipCompany').value;
+            const value = parseInt(document.getElementById('partnershipValue').value);
+            const status = document.getElementById('partnershipStatus').value;
+
+            if (!project || !company || !value) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id].grants.industryPartnerships) {
+                state.dataCollection[state.currentUser.id].grants.industryPartnerships = [];
+            }
+
+            state.dataCollection[state.currentUser.id].grants.industryPartnerships.push({
+                project, company, value, status
+            });
+
+            // Clear form
+            document.getElementById('partnershipProject').value = '';
+            document.getElementById('partnershipCompany').value = '';
+            document.getElementById('partnershipValue').value = '';
+            
+            hideAddForm('partnership');
+            render();
+        }
+
+        function removePartnershipData(index) {
+            state.dataCollection[state.currentUser.id].grants.industryPartnerships.splice(index, 1);
+            render();
+        }
+
+        // Media Data Functions
+        function addInterviewData() {
+            const topic = document.getElementById('interviewTopic').value;
+            const outlet = document.getElementById('interviewOutlet').value;
+            const date = document.getElementById('interviewDate').value;
+            const reach = parseInt(document.getElementById('interviewReach').value);
+
+            if (!topic || !outlet || !date || !reach) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id].media) {
+                state.dataCollection[state.currentUser.id].media = {};
+            }
+            if (!state.dataCollection[state.currentUser.id].media.interviews) {
+                state.dataCollection[state.currentUser.id].media.interviews = [];
+            }
+
+            state.dataCollection[state.currentUser.id].media.interviews.push({
+                topic, outlet, date, reach
+            });
+
+            // Clear form
+            document.getElementById('interviewTopic').value = '';
+            document.getElementById('interviewOutlet').value = '';
+            document.getElementById('interviewDate').value = '';
+            document.getElementById('interviewReach').value = '';
+            
+            hideAddForm('interview');
+            render();
+        }
+
+        function removeInterviewData(index) {
+            state.dataCollection[state.currentUser.id].media.interviews.splice(index, 1);
+            render();
+        }
+
+        function addTalkData() {
+            const topic = document.getElementById('talkTopic').value;
+            const event = document.getElementById('talkEvent').value;
+            const date = document.getElementById('talkDate').value;
+            const audience = parseInt(document.getElementById('talkAudience').value);
+
+            if (!topic || !event || !date || !audience) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id].media.publicTalks) {
+                state.dataCollection[state.currentUser.id].media.publicTalks = [];
+            }
+
+            state.dataCollection[state.currentUser.id].media.publicTalks.push({
+                topic, event, date, audience
+            });
+
+            // Clear form
+            document.getElementById('talkTopic').value = '';
+            document.getElementById('talkEvent').value = '';
+            document.getElementById('talkDate').value = '';
+            document.getElementById('talkAudience').value = '';
+            
+            hideAddForm('talk');
+            render();
+        }
+
+        function removeTalkData(index) {
+            state.dataCollection[state.currentUser.id].media.publicTalks.splice(index, 1);
+            render();
+        }
+
+        function addBlogData() {
+            const title = document.getElementById('blogTitle').value;
+            const platform = document.getElementById('blogPlatform').value;
+            const date = document.getElementById('blogDate').value;
+            const views = parseInt(document.getElementById('blogViews').value);
+
+            if (!title || !platform || !date || !views) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id].media.blogPosts) {
+                state.dataCollection[state.currentUser.id].media.blogPosts = [];
+            }
+
+            state.dataCollection[state.currentUser.id].media.blogPosts.push({
+                title, platform, date, views
+            });
+
+            // Clear form
+            document.getElementById('blogTitle').value = '';
+            document.getElementById('blogPlatform').value = '';
+            document.getElementById('blogDate').value = '';
+            document.getElementById('blogViews').value = '';
+            
+            hideAddForm('blog');
+            render();
+        }
+
+        function removeBlogData(index) {
+            state.dataCollection[state.currentUser.id].media.blogPosts.splice(index, 1);
+            render();
+        }
+
+        function updateSocialMedia(platform) {
+            const followers = prompt(`Enter current ${platform} followers:`);
+            const posts = prompt(`Enter total ${platform} posts this year:`);
+            const engagement = prompt(`Enter average ${platform} engagement rate (0-1, e.g., 0.05 for 5%):`);
+
+            if (followers && posts && engagement) {
+                if (!state.dataCollection[state.currentUser.id].media) {
+                    state.dataCollection[state.currentUser.id].media = {};
+                }
+                if (!state.dataCollection[state.currentUser.id].media.socialMedia) {
+                    state.dataCollection[state.currentUser.id].media.socialMedia = {};
+                }
+
+                state.dataCollection[state.currentUser.id].media.socialMedia[platform] = {
+                    followers: parseInt(followers),
+                    posts: parseInt(posts),
+                    engagement: parseFloat(engagement)
+                };
+
+                render();
+            }
+        }
+
+        // Policy Data Functions
+        function addCommitteeData() {
+            const name = document.getElementById('committeeName').value;
+            const role = document.getElementById('committeeRole').value;
+            const since = document.getElementById('committeeSince').value;
+            const meetings = parseInt(document.getElementById('committeeMeetings').value);
+
+            if (!name || !role || !since || !meetings) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id].policy) {
+                state.dataCollection[state.currentUser.id].policy = {};
+            }
+            if (!state.dataCollection[state.currentUser.id].policy.committees) {
+                state.dataCollection[state.currentUser.id].policy.committees = [];
+            }
+
+            state.dataCollection[state.currentUser.id].policy.committees.push({
+                name, role, since, meetings
+            });
+
+            // Clear form
+            document.getElementById('committeeName').value = '';
+            document.getElementById('committeeRole').value = '';
+            document.getElementById('committeeSince').value = '';
+            document.getElementById('committeeMeetings').value = '';
+            
+            hideAddForm('committee');
+            render();
+        }
+
+        function removeCommitteeData(index) {
+            state.dataCollection[state.currentUser.id].policy.committees.splice(index, 1);
+            render();
+        }
+
+        function addConsultationData() {
+            const project = document.getElementById('consultationProject').value;
+            const organization = document.getElementById('consultationOrganization').value;
+            const date = document.getElementById('consultationDate').value;
+            const compensation = parseInt(document.getElementById('consultationCompensation').value) || 0;
+
+            if (!project || !organization || !date) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id].policy.consultations) {
+                state.dataCollection[state.currentUser.id].policy.consultations = [];
+            }
+
+            state.dataCollection[state.currentUser.id].policy.consultations.push({
+                project, organization, date, compensation
+            });
+
+            // Clear form
+            document.getElementById('consultationProject').value = '';
+            document.getElementById('consultationOrganization').value = '';
+            document.getElementById('consultationDate').value = '';
+            document.getElementById('consultationCompensation').value = '';
+            
+            hideAddForm('consultation');
+            render();
+        }
+
+        function removeConsultationData(index) {
+            state.dataCollection[state.currentUser.id].policy.consultations.splice(index, 1);
+            render();
+        }
+
+        function addPolicyPaperData() {
+            const title = document.getElementById('policyPaperTitle').value;
+            const publisher = document.getElementById('policyPaperPublisher').value;
+            const date = document.getElementById('policyPaperDate').value;
+            const downloads = parseInt(document.getElementById('policyPaperDownloads').value);
+
+            if (!title || !publisher || !date || !downloads) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (!state.dataCollection[state.currentUser.id].policy.policyPapers) {
+                state.dataCollection[state.currentUser.id].policy.policyPapers = [];
+            }
+
+            state.dataCollection[state.currentUser.id].policy.policyPapers.push({
+                title, publisher, date, downloads
+            });
+
+            // Clear form
+            document.getElementById('policyPaperTitle').value = '';
+            document.getElementById('policyPaperPublisher').value = '';
+            document.getElementById('policyPaperDate').value = '';
+            document.getElementById('policyPaperDownloads').value = '';
+            
+            hideAddForm('policyPaper');
+            render();
+        }
+
+        function removePolicyPaperData(index) {
+            state.dataCollection[state.currentUser.id].policy.policyPapers.splice(index, 1);
+            render();
+        }
+
+        // Main Render Function
+        function render() {
+            const app = document.getElementById('app');
+            
+            if (!state.currentUser) {
+                app.innerHTML = renderLoginScreen();
+                return;
+            }
+
+            let content;
+            switch (state.currentView) {
+                case 'dashboard':
+                    content = renderDashboard();
+                    break;
+                case 'datacollection':
+                    content = renderDataCollection();
+                    break;
+                case 'goals':
+                    content = renderGoals();
+                    break;
+                case 'progress':
+                    content = renderProgress();
+                    break;
+                case 'admin':
+                    content = renderAdminPanel();
+                    break;
+                default:
+                    content = renderDashboard();
+            }
+
+            app.innerHTML = `
+                <div class="flex h-screen bg-gray-100">
+                    ${renderSidebar()}
+                    <div class="flex-1 overflow-auto">
+                        <div class="p-8">
+                            ${content}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            render();
+        });
+    </script>
+</body>
+</html>
